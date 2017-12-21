@@ -1,0 +1,21 @@
+Package: selectex
+Type: Package
+Title: Designs primers
+Version: 0.1.0
+Author: Alexey Uvarovskii
+Maintainer: Alexey Uvarovskii <alexey.mipt@gmail.com>
+Description: Primer design using Primer3.
+License: GPL3.0
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 2.10)
+#Remotes: bioc::3.5/BiocInstaller, bioc::3.5/ensembldb, bioc::3.5/BSgenome,
+#         bioc::3.5/GenomicRanges
+Imports: GenomicRanges, ggplot2, stats, BSgenome, IRanges, S4Vectors
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown,
+    covr
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1

@@ -1,0 +1,28 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Build Status](https://travis-ci.org/alexey0308/selectex.svg?branch=dev)](https://travis-ci.org/alexey0308/selectex)  
+[![codecov](https://codecov.io/gh/alexey0308/selectex/branch/dev/graph/badge.svg)](https://codecov.io/gh/alexey0308/selectex)
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# selectex
+
+Design primers using Primer3. 
+
+## Installation
+
+You can install selectex from github with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("alexey0308/selectex")
+```
+
