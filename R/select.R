@@ -7,21 +7,22 @@
 #' @export
 #'
 extractExonPairs <- function(exonsByTx) {
-  assertColumns(exonsByTx, "exon_id")
-  lapply(exonsByTx, splitToPairs)
+  lapply(exonsByTx, assertColumns, "exon_id")
+  lapply(exonsByTx, function(x)  splitToPairs(x$exon_id))
 }
 
 # works for mcols and data.frames
 assertColumns <- function(x, ...) {
-  columns <- as.list(...)
-  ismissing <- vapply(columns, function(name) is.null(`$`(x, name)), logical(1))
-  if (any(ismissing))
-    stop(paste("Missing columns: ", paste(name, collapse = ", ")))
+  columns <- as.character(...)
+  missedColumns <- columns[!columns %in% names(S4Vectors::mcols(x))]
+  if (length(missedColumns) > 0)
+    stop(paste("Missing columns: ",
+               paste(missedColumns, collapse = ", ")))
 }
 
 # create a list of character(2) using the provided order
 splitToPairs <- function(exonIds) {
-  lapply(seq_len(exonIds), function(i) {
+  lapply(seq_along(exonIds), function(i) {
     c(exonIds[i - 1], exonIds[i])
   })
 }
