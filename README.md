@@ -1,7 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/alexey0308/selectex.svg?branch=dev)](https://travis-ci.org/alexey0308/selectex)
-[![codecov](https://codecov.io/gh/alexey0308/selectex/branch/dev/graph/badge.svg)](https://codecov.io/gh/alexey0308/selectex)
+[![Build Status](https://travis-ci.org/dieterich-lab/primex.svg?branch=dev)](https://travis-ci.org/dieterich-lab/primex.svg?branch=dev) [![codecov](https://codecov.io/gh/dieterich-lab/primex/branch/dev/graph/badge.svg)](https://codecov.io/gh/dieterich-lab/primex/)
 
 selectex
 ========
