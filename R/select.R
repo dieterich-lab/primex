@@ -85,13 +85,14 @@ pair2sj <- function(p) {
 #'
 #' @param exonPairs a list of GRanges with the splice junction exon pairs.
 #'   For a single pair a single GRanges object may be provided.
-#' @param bsg BSgenome instance, e.g. BSgenome.Hsapiens.NCBI.GRCh38
+#' @param src whether a BSgenome instance, e.g. BSgenome.Hsapiens.NCBI.GRCh38 or
+#'   a FaFile object
 #'
 #' @return a list of GRanges with additional `seq` data column with
 #'   the retrieved sequence.
 #' @export
 #'
-exonSeqs <- function(exonPairs, bsg) {
+exonSeqs <- function(exonPairs, src) {
   # extract all names 
   if (!is.list(exonPairs))
     exonPairs <- list(exonPairs)
@@ -103,7 +104,13 @@ exonSeqs <- function(exonPairs, bsg) {
     allExons <- do.call(c, unname(allExons))
   }
   allExons <- allExons[!duplicated(allExons$exon_id)]
-  exseqs <- BSgenome::getSeq(bsg, allExons, as.character = TRUE)
+  if (inherits(src, "FaFile")) {
+    exseqs <-  as.character(Rsamtools::getSeq(x = src, allExons))
+  } else  if (inherits(src, "BSgenome")) {
+    exseqs <- BSgenome::getSeq(bsg, allExons, as.character = TRUE)
+  } else {
+    stop("src must be FaFile or BSgenome object")
+  }
   names(exseqs) <- allExons$exon_id
   # a list of transcripts with seqs of exons
   for (i in seq_along(exonPairs)) {
