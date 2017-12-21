@@ -7,8 +7,7 @@
 #' @export
 #'
 extractExonPairs <- function(exonsByTx) {
-  lapply(exonsByTx, assertColumns, "exon_id")
-  lapply(exonsByTx, function(x)  splitToPairs(x$exon_id))
+  lapply(exonsByTx, function(x)  splitToPairs(x))
 }
 
 # works for mcols and data.frames
@@ -39,21 +38,11 @@ splitToPairs <- function(exonIds) {
 #' @export
 #'
 exonsBySJ <- function(exonsByTx, tolerance = 0) {
+  lapply(exonsByTx, assertColumns, "exon_id")
   # filter single exon tx's
-  exonsByTx <- exonsByTx[vapply(exonsByTx, length, integer(1)) > 1]
+  exonNumber  <- vapply(exonsByTx, length, integer(1))
+  exonsByTx   <- exonsByTx[exonNumber > 1]
   expairsbyTx <- extractExonPairs(exonsByTx)
-  # transform to pairs of names 
-  allExons <- unlist(exonsByTx)
-  # transform pairs of exon_id --> GRanges
-  expairsbyTx <- lapply(expairsbyTx, function(exonsInTx) {
-    res <- lapply(exonsInTx, function(p) {
-      pair <- allExons[match(p, allExons$exon_id)]
-      names(pair) <- pair$exon_id
-      pair
-    })
-    names(res) <- lapply(exonsInTx, paste, collapse="|")
-    res
-  })
   expairsbyTx <- filterByDistance(expairsbyTx, tolerance)
   expairsbyTx
 }
