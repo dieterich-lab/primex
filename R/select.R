@@ -7,19 +7,22 @@
 #' @export
 #'
 extractExonPairs <- function(exonsByTx) {
-  lapply(exonsByTx, function(e) {
-    if (is.null(e$exon_rank) ||
-        is.null(e$exon_id)) {
-      stop(paste(
-        "Exonic GenomicRanges  must contain \"exon_id\"  and ",
-        "\"exon_rank\" fields"
-      ))
-    }
-    e <- e[order(e$exon_rank)]
-    sjpairs <- lapply(e$exon_rank[-1], function(i) {
-      c(e$exon_id[i-1], e$exon_id[i])
-    })
-    sjpairs
+  assertColumns(exonsByTx, "exon_id")
+  lapply(exonsByTx, splitToPairs)
+}
+
+# works for mcols and data.frames
+assertColumns <- function(x, ...) {
+  columns <- as.list(...)
+  ismissing <- vapply(columns, function(name) is.null(`$`(x, name)), logical(1))
+  if (any(ismissing))
+    stop(paste("Missing columns: ", paste(name, collapse = ", ")))
+}
+
+# create a list of character(2) using the provided order
+splitToPairs <- function(exonIds) {
+  lapply(seq_len(exonIds), function(i) {
+    c(exonIds[i - 1], exonIds[i])
   })
 }
 
@@ -37,7 +40,7 @@ extractExonPairs <- function(exonsByTx) {
 exonsBySJ <- function(exonsByTx, tolerance = 0) {
   # filter single exon tx's
   exonsByTx <- exonsByTx[vapply(exonsByTx, length, integer(1)) > 1]
-  expairsbyTx   <- extractExonPairs(exonsByTx)
+  expairsbyTx <- extractExonPairs(exonsByTx)
   # transform to pairs of names 
   allExons <- unlist(exonsByTx)
   # transform pairs of exon_id --> GRanges
