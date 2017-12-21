@@ -20,7 +20,7 @@ assertColumns <- function(x, ...) {
 }
 
 splitToPairs <- function(x) {
-  lapply(seq_along(x), function(i) {
+  lapply(seq_along(x)[-1], function(i) {
     c(x[i - 1], x[i])
   })
 }
