@@ -224,20 +224,7 @@ diagnose <- function(result) {
   result$options[expl]
 }
 
-#' Crate GRanges object from the Primer3 output
-#'
-#' @param primers 
-#'
-#' @return
-#' @export
-#'
-#' @examples
-toGRanges <- function(primers, exons) {
-  # in case the raw output from the runPrimer3 is provided
-  if (!is.null(primers$primers))
-    primers <- primers$primers
-  
-}
+
 primerCoords <- function(coords) {
   coords <- do.call(
     rbind,
