@@ -24,7 +24,7 @@ must overlap with the splice junction.
 ### A quick start
 
 ```{r eval = FALSE}
-library(selectex)
+library(primex)
 exon1 <- paste0(
   "CTCACCATGGATGATGATATCGCCGCGCTCGTCGTCGACAACGGCTCCGGCATGTGCAAG",
   "GCCGGCTTCGCGGGCGACGATGCCCCCCGGGCCGTCTTCCCCTCCATCGTGGGGCGCCCC",
@@ -45,7 +45,7 @@ primers <- runPrimer3(seqOpts)
 ### A quick start with annotations
 
 ```{r eval = FALSE}
-library(selectex)  
+library(primex)  
 
 library(EnsDb.Hsapiens.v86)
 library(BSgenome.Hsapiens.NCBI.GRCh38)
@@ -71,7 +71,7 @@ primers <- runPrimer3(seqOpts)
 ## Step by step
 
 ```{r}
-library(selectex)  
+library(primex)  
 ```
 
 ### Find unique exons 
@@ -86,8 +86,8 @@ of exons with their `exon_id` and `exon_rank`.
 suppressPackageStartupMessages(
   library(GenomicRanges)
 )
-selectex::bcl6exons[1]
-plotSegments(selectex::bcl6exons)
+primex::bcl6exons[1]
+plotSegments(primex::bcl6exons)
 ```
 
 
@@ -96,7 +96,7 @@ i.e. unique exon pairs. **This is the default behaviour. **
 For every transcript we may receive several such 
 candidates, for example,
 ```{r}
-sjExonPairs <- exonsBySJ(selectex::bcl6exons)
+sjExonPairs <- exonsBySJ(primex::bcl6exons)
 sjExonPairs$ENST00000419510[1]
 ```
 

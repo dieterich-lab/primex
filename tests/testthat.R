@@ -1,4 +1,4 @@
 library(testthat)
-library(selectex)
+library(primex)
 
-test_check("selectex")
+test_check("primex")

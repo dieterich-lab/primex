@@ -158,7 +158,7 @@ p3ToList <- function(lines) {
 #'
 p3Settings <- function(settings = NULL, defaultsFile = NULL) {
   if (is.null(defaultsFile)) {
-    pkgDir <- find.package('selectex', .libPaths())
+    pkgDir <- find.package('primex', .libPaths())
     defaultsFile <- normalizePath(
       file.path(pkgDir,"primer3", "primer3_v1_1_4_default_settings.txt"))
     if (!file.exists(defaultsFile))
@@ -185,7 +185,7 @@ pickPrimer3Exec <- function(file) {
     info <- as.list(Sys.info())
     machine <- ifelse(grepl("64", info$machine), "x86_64", "i686")
     file <- executables[[info$sysname]][[machine]]
-    pkgDir <- find.package('selectex', .libPaths())
+    pkgDir <- find.package('primex', .libPaths())
     file <- normalizePath(file.path(pkgDir, "primer3", file))
   }
   .errorIfNotExists(file, "for the Primer3 executable  is not found.")
@@ -262,7 +262,7 @@ pairToGRanges <- function(pair, seqs) {
   seqstrand <- as.character(strand(seqs))[1]
   res <- lapply(
     list(start = IRanges::start(pair), end = IRanges::end(pair)),
-    selectex:::.toGenome,
+    .toGenome,
     upExon = seqs[1],
     downExon = seqs[2],
     strand = seqstrand
