@@ -103,8 +103,7 @@ exonSeqs <- function(exonPairs, bsg) {
     allExons <- do.call(c, unname(allExons))
   }
   allExons <- allExons[!duplicated(allExons$exon_id)]
-  exseqs <- BSgenome::getSeq(bsg, allExons)
-  exseqs <- vapply(exseqs, as.character, character(1))
+  exseqs <- BSgenome::getSeq(bsg, allExons, as.character = TRUE)
   names(exseqs) <- allExons$exon_id
   # a list of transcripts with seqs of exons
   for (i in seq_along(exonPairs)) {
