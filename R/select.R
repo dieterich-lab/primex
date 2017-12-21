@@ -19,10 +19,9 @@ assertColumns <- function(x, ...) {
                paste(missedColumns, collapse = ", ")))
 }
 
-# create a list of character(2) using the provided order
-splitToPairs <- function(exonIds) {
-  lapply(seq_along(exonIds), function(i) {
-    c(exonIds[i - 1], exonIds[i])
+splitToPairs <- function(x) {
+  lapply(seq_along(x), function(i) {
+    c(x[i - 1], x[i])
   })
 }
 
