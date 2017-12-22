@@ -18,15 +18,14 @@ test_that("filter by distance works", {
                         exon_id = c("e5", "e6"))
                 ))
     
-  tolerance <- -1
+  minDiff <- 0
   res <- expairs
-  expect_equal(filterByDistance(expairs, tolerance), res)
-  tolerance <- 4
+  expect_equal(filterByDistance(expairs, minDiff), res)
+  minDiff <- 5
   res[[2]] <- res[[3]][integer(0)]
   res[[3]] <- res[[3]][integer(0)]
-  expect_equal(filterByDistance(expairs, tolerance), res)
-  tolerance <- 5
+  expect_equal(filterByDistance(expairs, minDiff), res)
+  minDiff <- 6
   res[[1]] <- res[[1]][integer(0)]
-  expect_equal(filterByDistance(expairs, tolerance), res)
-  
+  expect_equal(filterByDistance(expairs, minDiff), res)
 })

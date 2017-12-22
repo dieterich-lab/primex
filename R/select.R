@@ -37,39 +37,31 @@ splitToPairs <- function(x) {
 #' @export
 #'
 exonsBySJ <- function(exonsByTx, tolerance = 0) {
-  lapply(exonsByTx, assertColumns, "exon_id")
   # filter single exon tx's
   exonNumber  <- vapply(exonsByTx, length, integer(1))
   exonsByTx   <- exonsByTx[exonNumber > 1]
   expairsbyTx <- extractExonPairs(exonsByTx)
-  expairsbyTx <- filterByDistance(expairsbyTx, tolerance)
-  expairsbyTx
+  filterByDistance(expairsbyTx, tolerance)
 }
 
+
 # returns a filtered list
-filterByDistance <- function(expairs, tolerance) {
-  sjCoords <- lapply(unlist(expairs), pair2sj)
-  sjCoords <- do.call(rbind, unname(sjCoords))
-  d <- as.matrix(stats::dist(sjCoords[c("start", "end")], method = "minkowski", p = 1))
-  # check if second minimal distance (after self==0) is above tolerance
-  isDuplicate <- tolerance >= apply(d, 1, function(x) sort(x)[2])
-  toInclude <- names(isDuplicate)[!isDuplicate]
-  # filter
-  lapply(expairs, function(pairsInTx) {
-    pairIds <- vapply(pairsInTx, function(x)
-      paste(x$exon_id, collapse = "|"), character(1))
-    pairsInTx[pairIds %in% toInclude]
-  })
+filterByDistance <- function(expairs, minDiff) {
+  txIds    <- rep(names(expairs), sapply(expairs, length))
+  sjCoords <- do.call(rbind, lapply(unlist(expairs), pair2sj))
+  # check if second minimal distance (after self == 0) is above tolerance
+  d <- as.matrix(stats::dist(sjCoords, method = "minkowski", p = 1))
+  diag(d)     <- Inf
+  minDist     <- apply(d, 1, min)
+  tolerated <- split(minDist >= minDiff, txIds)
+  Map(`[`, expairs, tolerated)
 }
 
 # take end of the first and the start of the second exon
 # assume that they are ordered by the exon_rank
 pair2sj <- function(p) {
   x <- as.data.frame(p)
-  res <- x[1,]#c("seqnames", "start", "end", "strand")]
-  res[1,c("start", "end")] <- range(x$end[1], x$start[2])
-  rownames(res) <- paste0(p$exon_id, collapse = "|")
-  res
+  c(x$end[1], x$start[2])
 }
 
 
