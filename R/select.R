@@ -19,8 +19,9 @@ assertColumns <- function(x, ...) {
                paste(missedColumns, collapse = ", ")))
 }
 
+# we believe that there is at list one exon in a transcript
 splitToPairs <- function(x) {
-  lapply(seq_along(x)[-1], function(i) {
+  lapply(seq_along(x[-1]), function(i) {
     c(x[i - 1], x[i])
   })
 }
@@ -37,9 +38,6 @@ splitToPairs <- function(x) {
 #' @export
 #'
 exonsBySJ <- function(exonsByTx, tolerance = 1) {
-  # filter single exon tx's
-  exonNumber  <- vapply(exonsByTx, length, integer(1))
-  exonsByTx   <- exonsByTx[exonNumber > 1]
   expairsbyTx <- extractExonPairs(exonsByTx)
   filterByDistance(expairsbyTx, tolerance)
 }
