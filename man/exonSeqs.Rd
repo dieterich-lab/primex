@@ -4,13 +4,14 @@
 \alias{exonSeqs}
 \title{Return sequences for the exon pairs}
 \usage{
-exonSeqs(exonPairs, bsg)
+exonSeqs(exonPairs, src)
 }
 \arguments{
 \item{exonPairs}{a list of GRanges with the splice junction exon pairs.
 For a single pair a single GRanges object may be provided.}
 
-\item{bsg}{BSgenome instance, e.g. BSgenome.Hsapiens.NCBI.GRCh38}
+\item{src}{whether a BSgenome instance, e.g. BSgenome.Hsapiens.NCBI.GRCh38, 
+XStringSet object or a FaFile object}
 }
 \value{
 a list of GRanges with additional `seq` data column with
