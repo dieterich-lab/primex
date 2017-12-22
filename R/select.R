@@ -102,5 +102,13 @@ exonSeqs <- function(exonPairs, src) {
       ids <- exonPairs[[i]]$exon_id
       S4Vectors::mcols(exonPairs[[i]])$seq <- exseqs[ids]
   }
-  exonPairs
+  setSJNames(exonPairs)
+}
+
+setSJNames <- function(x) {
+  pairIds <- lapply(seq_along(x), function(i) {
+     paste(x[[i]]$exon_id, collapse = "|")
+  })
+  names(x) <- pairIds
+  x
 }
