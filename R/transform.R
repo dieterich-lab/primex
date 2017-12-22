@@ -1,17 +1,21 @@
-.toGenome <- function(x, strand, upExon, downExon) {
+.toGenome <- function(x, granges) {
+  granges <- as.data.frame(granges)
+  up   <- granges[1,, drop = FALSE]
+  down <- granges[2,, drop = FALSE]
+  strand <- unique(granges$strand)
   vapply(x, function(y) {
     if (strand == '+') {
-      if (y <= IRanges::width(upExon)) {
-        res <- y + IRanges::start(upExon) - 1
+      if (y <= up$width) {
+        res <- y + up$start - 1
       } else {
-        res <- y - IRanges::width(upExon) + IRanges::start(downExon) - 1
+        res <- y - up$width + down$start - 1
       }
       res
     } else {
-      if (y <= IRanges::width(upExon)) {
-        res <- IRanges::end(upExon) - y + 1
+      if (y <= up$width) {
+        res <- up$end - y + 1
       } else {
-        res <-  IRanges::end(downExon) - (y - IRanges::width(upExon)) + 1
+        res <-  down$end - (y - up$width) + 1
       }
       res
     }
