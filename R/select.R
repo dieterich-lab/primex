@@ -56,8 +56,8 @@ filterByDistance <- function(expairs, minDiff) {
   sjCoords <- do.call(rbind, lapply(unlist(expairs), pair2sj))
   # check if second minimal distance (after self == 0) is above tolerance
   d <- as.matrix(stats::dist(sjCoords, method = "minkowski", p = 1))
-  diag(d)     <- Inf
-  minDist     <- apply(d, 1, min)
+  diag(d) <- Inf
+  minDist <- apply(d, 1, min)
   tolerated <- split(minDist >= minDiff, txIds)
   Map(`[`, expairs, tolerated)
 }
