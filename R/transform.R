@@ -3,23 +3,15 @@
   up   <- granges[1,, drop = FALSE]
   down <- granges[2,, drop = FALSE]
   strand <- unique(granges$strand)
-  vapply(x, function(y) {
-    if (strand == '+') {
-      if (y <= up$width) {
-        res <- y + up$start - 1
-      } else {
-        res <- y - up$width + down$start - 1
-      }
-      res
-    } else {
-      if (y <= up$width) {
-        res <- up$end - y + 1
-      } else {
-        res <-  down$end - (y - up$width) + 1
-      }
-      res
-    }
-  }, numeric(1))
+  inUpstream <- x <= up$width
+  if (strand == '+') {
+    x[ inUpstream] <- x[ inUpstream] + up$start - 1
+    x[!inUpstream] <- x[!inUpstream] - up$width + down$start - 1
+  } else {
+    x[ inUpstream] <- -x[ inUpstream] + up$end + 1
+    x[!inUpstream] <- -x[!inUpstream] + down$end + up$width + 1
+  }
+  x
 }
 
 primerCoords <- function(coords) {
