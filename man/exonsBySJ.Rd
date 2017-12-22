@@ -4,13 +4,13 @@
 \alias{exonsBySJ}
 \title{Given a list of exons returns candidates for primer design}
 \usage{
-exonsBySJ(exonsByTx, tolerance = 0)
+exonsBySJ(exonsByTx, tolerance = 1)
 }
 \arguments{
 \item{exonsByTx}{exon GRanges by transcripts}
 
 \item{tolerance}{the minimal tolerable difference in splice junctions 
-coordinates}
+coordinates (0: return everything, 1: only unique splice junctions).}
 }
 \value{
 a GRangesList

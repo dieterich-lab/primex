@@ -31,12 +31,12 @@ splitToPairs <- function(x) {
 #'
 #' @param exonsByTx exon GRanges by transcripts
 #' @param tolerance the minimal tolerable difference in splice junctions 
-#'   coordinates
+#'   coordinates (0: return everything, 1: only unique splice junctions).
 #'
 #' @return a GRangesList
 #' @export
 #'
-exonsBySJ <- function(exonsByTx, tolerance = 0) {
+exonsBySJ <- function(exonsByTx, tolerance = 1) {
   # filter single exon tx's
   exonNumber  <- vapply(exonsByTx, length, integer(1))
   exonsByTx   <- exonsByTx[exonNumber > 1]
