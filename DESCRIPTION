@@ -8,10 +8,12 @@ Description: Primer design using Primer3.
 License: GPL3.0
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 2.10)
+Depends: 
+    R (>= 2.10),
+    GenomicRanges
 #Remotes: bioc::3.5/BiocInstaller, bioc::3.5/ensembldb, bioc::3.5/BSgenome,
 #         bioc::3.5/GenomicRanges
-Imports: GenomicRanges, ggplot2, stats, BSgenome, IRanges, S4Vectors
+Imports: ggplot2, stats, BSgenome, IRanges, S4Vectors
 Suggests: 
     testthat,
     knitr,
