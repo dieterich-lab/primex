@@ -38,7 +38,7 @@ By default, if `primer3Config` is not secified/NULL,
 seq1 <- paste(c("A", "T", "G", "C")[sample(4, 300, replace = TRUE)], 
               collapse = "")
 seqOpts <- seqSettings(seqId = "seq1", seq = seq1)
-res <- runPrimer3(seqOpts)
+res <- design(seqOpts)
 res$primers
 
 }

@@ -224,3 +224,4 @@ diagnose <- function(result) {
   result$options[expl]
 }
 
+
