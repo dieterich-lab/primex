@@ -43,7 +43,7 @@ splitToPairs <- function(x) {
 #' @return a GRangesList
 #' @export
 #'
-exonsBySJ <- function(exonsByTx, tolerance = 1) {
+selectPairs <- function(exonsByTx, tolerance = 1) {
   expairsbyTx <- extractExonPairs(exonsByTx)
   filterByDistance(expairsbyTx, tolerance)
 }
@@ -81,7 +81,7 @@ pair2sj <- function(p) {
 #'   the retrieved sequence.
 #' @export
 #'
-exonSeqs <- function(exonPairs, src) {
+addExonSeq <- function(exonPairs, src) {
   stopifnot(allInherit(exonPairs, "GRanges"))
   lapply(exonPairs, assertColumns, "exon_id")
   if (!is.list(exonPairs))

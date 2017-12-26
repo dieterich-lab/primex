@@ -67,13 +67,13 @@ test_that("exonSeqs input checks work", {
                         ranges = IRanges::IRanges(c(1, 100), c(15,200)), 
                         exon_id = c("e5", "e6")))
   )
-  expect_error(exonSeqs(expairs, list()))
+  expect_error(addExonSeq(expairs, list()))
   dna <- mockDNAStringSet("a", 200)
-  expect_error(exonSeqs(list(), dna))
-  expect_error(exonSeqs(list(), iris))
-  expect_silent(exonSeqs(expairs[[1]], dna))
+  expect_error(addExonSeq(list(), dna))
+  expect_error(addExonSeq(list(), iris))
+  expect_silent(addExonSeq(expairs[[1]], dna))
   expairs[[1]][[1]]$exon_id <- NULL
-  expect_error(exonSeqs(expairs[[1]], dna))
+  expect_error(addExonSeq(expairs[[1]], dna))
 })
 
 test_that("check for exonsByTx class works", {
