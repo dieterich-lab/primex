@@ -56,12 +56,12 @@ bsg <- BSgenome.Hsapiens.NCBI.GRCh38
 geneName <- "BCL6"
 exonsByTx <- ensembldb::exonsBy(db, filter = GenenameFilter(geneName))
 # find unique splice junctions 
-sjExonPairs <- exonsBySJ(exonsByTx)
+sjExonPairs <- selectPairs(exonsByTx)
 # or report all the pairs
-# sjExonPairs <- exonsBySJ(exonsByTx, tolerance = -1)
+# sjExonPairs <- selectPairs(exonsByTx, tolerance = -1)
 
 # take your transcript of interest
-exseqs <- exonSeqs(sjExonPairs$ENST00000419510, bsg)
+exseqs <- addSeq(sjExonPairs$ENST00000419510, bsg)
 
 # run Primer3 for one of splice junction pair
 seqOpts <- setSeqOptions(gr = exseqs$`ENSE00001666929|ENSE00001377234`)
@@ -96,7 +96,7 @@ i.e. unique exon pairs. **This is the default behaviour. **
 For every transcript we may receive several such 
 candidates, for example,
 ```{r}
-sjExonPairs <- exonsBySJ(primex::bcl6exons)
+sjExonPairs <- selectPairs(primex::bcl6exons)
 sjExonPairs$ENST00000419510[1]
 ```
 
@@ -110,7 +110,7 @@ suppressPackageStartupMessages(
   library(BSgenome.Hsapiens.NCBI.GRCh38)
 )
 bsg <- BSgenome.Hsapiens.NCBI.GRCh38
-exseqs <- exonSeqs(sjExonPairs$ENST00000419510, bsg)
+exseqs <- addSeq(sjExonPairs$ENST00000419510, bsg)
 exseqs$`ENSE00001666929|ENSE00001377234`
 ```
 

@@ -81,7 +81,7 @@ pair2sj <- function(p) {
 #'   the retrieved sequence.
 #' @export
 #'
-addExonSeq <- function(exonPairs, src) {
+addSeq <- function(exonPairs, src) {
   stopifnot(allInherit(exonPairs, "GRanges"))
   lapply(exonPairs, assertColumns, "exon_id")
   if (!is.list(exonPairs))
