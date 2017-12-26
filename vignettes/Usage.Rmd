@@ -39,7 +39,7 @@ seqOpts <- seqSettings(
   seqId = "example1",
   seq = c(exon1, exon2))
 
-primers <- runPrimer3(seqOpts)
+primers <- design(seqOpts)
 ```
 
 ### A quick start with annotations
@@ -65,7 +65,7 @@ exseqs <- addSeq(sjExonPairs$ENST00000419510, bsg)
 
 # run Primer3 for one of splice junction pair
 seqOpts <- seqSettings(gr = exseqs$`ENSE00001666929|ENSE00001377234`)
-primers <- runPrimer3(seqOpts)
+primers <- design(seqOpts)
 ```
 
 ## Step by step
@@ -124,7 +124,7 @@ splice junction position, etc. One may start from the `GRanges` object,
 which has a column `seq` with a nucleotide sequence for every item:
 ```{r}
 seqOpts <- seqSettings(gr = exseqs$`ENSE00001666929|ENSE00001377234`)
-res <- runPrimer3(seqOpts)
+res <- design(seqOpts)
 # take first two pairs: Primer3 reports by default maximum 5 pairs
 knitr::kable(t(res$primers)[,1:2])
 ```
@@ -152,7 +152,7 @@ provided the needed paths.
 primerOpts <- p3Settings(
   defaultsFile = 
     "/home/tsawyer/primer3/primer3_v1_1_4_default_settings.txt")
-runPrimer3(
+design(
   seqOpts,
   primerOpts,
   returnStats = TRUE,
@@ -186,7 +186,7 @@ seqOpts <- setSeqOptions(
   seqId = "example1",
   seq = c(exon1, exon2))
 
-result <- runPrimer3(seqOpts)
+result <- design(seqOpts)
 result$primers
 ```
 
@@ -196,6 +196,6 @@ what can be a reason for their rejection:
 diagnose(result)
 ```
 
-By default, `runPrimer3` overwrites the option 
+By default, `design` overwrites the option 
 `PRIMER_EXPLAIN_FLAG`, which allows to see the run statistics.
 

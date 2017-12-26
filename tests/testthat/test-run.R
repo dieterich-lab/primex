@@ -7,5 +7,5 @@ test_that("can execute", {
            "GACTTCACTTGCGCCAGAAGCATGGCGCCATCACCAACACCAAGGTGCAATACCGCGTGTCA")
   seqOpts$SEQUENCE_TEMPLATE <- seq
   #seqOpts$SEQUENCE_OVERLAP_JUNCTION_LIST <- nchar(sjexons[[1]])
-  runPrimer3(seqOpts)
+  design(seqOpts)
 })

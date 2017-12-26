@@ -81,10 +81,10 @@ seqSettings <- function(seqOpts = NULL,
 #' seq1 <- paste(c("A", "T", "G", "C")[sample(4, 300, replace = TRUE)], 
 #'               collapse = "")
 #' seqOpts <- seqSettings(seqId = "seq1", seq = seq1)
-#' res <- runPrimer3(seqOpts)
+#' res <- design(seqOpts)
 #' res$primers
 #'
-runPrimer3 <- function(seqOpts,
+design <- function(seqOpts,
                        primerOpts  = NULL,
                        returnStats = TRUE,
                        path = list(primer3 = NULL,
