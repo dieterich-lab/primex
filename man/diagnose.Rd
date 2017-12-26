@@ -20,7 +20,7 @@ Returns diagnostics information from the run
 # Too short sequence
 seq1 <- paste(c("A", "T", "G", "C")[sample(4, 100, replace = TRUE)], 
               collapse = "")
-seqOpts <- setSeqOptions(seqId = "seq1", seq = seq1)
+seqOpts <- seqSettings(seqId = "seq1", seq = seq1)
 res <- runPrimer3(seqOpts)
 diagnose(res)
 

@@ -15,9 +15,9 @@
 #'  the `seqOpts`.
 #' @export
 #' @examples 
-#' seqOpts <- setSeqOptions(seqId = "seq1", seq = "AATCTGAATCGCGCTTAAAGCTA")
+#' seqOpts <- seqSettings(seqId = "seq1", seq = "AATCTGAATCGCGCTTAAAGCTA")
 #'
-setSeqOptions <- function(seqOpts = NULL,
+seqSettings <- function(seqOpts = NULL,
                           gr = NULL, 
                           seqId = NULL,
                           seq = NULL) {
@@ -80,7 +80,7 @@ setSeqOptions <- function(seqOpts = NULL,
 #' # make up a sequence
 #' seq1 <- paste(c("A", "T", "G", "C")[sample(4, 300, replace = TRUE)], 
 #'               collapse = "")
-#' seqOpts <- setSeqOptions(seqId = "seq1", seq = seq1)
+#' seqOpts <- seqSettings(seqId = "seq1", seq = seq1)
 #' res <- runPrimer3(seqOpts)
 #' res$primers
 #'
@@ -214,7 +214,7 @@ pickPrimer3Config <- function(primer3Config, primer3Path) {
 #' # Too short sequence
 #' seq1 <- paste(c("A", "T", "G", "C")[sample(4, 100, replace = TRUE)], 
 #'               collapse = "")
-#' seqOpts <- setSeqOptions(seqId = "seq1", seq = seq1)
+#' seqOpts <- seqSettings(seqId = "seq1", seq = seq1)
 #' res <- runPrimer3(seqOpts)
 #' diagnose(res)
 #' 

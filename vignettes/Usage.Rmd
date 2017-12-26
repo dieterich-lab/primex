@@ -35,7 +35,7 @@ exon2 <- paste0(
  "ATGGAGAAAATCTGGCACCACACCTTCTACAATGAGCTGCGTGTGGCTCCCGAGGAGCAC",
  "CCCGTGCTGCTGACCGAGGCCCCCCTGAACCCCAAGGCCAACCGCGAGAAGATGACCCAG") 
 
-seqOpts <- setSeqOptions(
+seqOpts <- seqSettings(
   seqId = "example1",
   seq = c(exon1, exon2))
 
@@ -64,7 +64,7 @@ sjExonPairs <- selectPairs(exonsByTx)
 exseqs <- addSeq(sjExonPairs$ENST00000419510, bsg)
 
 # run Primer3 for one of splice junction pair
-seqOpts <- setSeqOptions(gr = exseqs$`ENSE00001666929|ENSE00001377234`)
+seqOpts <- seqSettings(gr = exseqs$`ENSE00001666929|ENSE00001377234`)
 primers <- runPrimer3(seqOpts)
 ```
 
@@ -123,7 +123,7 @@ the sequence of nucleotides itself,
 splice junction position, etc. One may start from the `GRanges` object, 
 which has a column `seq` with a nucleotide sequence for every item:
 ```{r}
-seqOpts <- setSeqOptions(gr = exseqs$`ENSE00001666929|ENSE00001377234`)
+seqOpts <- seqSettings(gr = exseqs$`ENSE00001666929|ENSE00001377234`)
 res <- runPrimer3(seqOpts)
 # take first two pairs: Primer3 reports by default maximum 5 pairs
 knitr::kable(t(res$primers)[,1:2])
@@ -133,7 +133,7 @@ knitr::kable(t(res$primers)[,1:2])
 
 All the parameters can be explicitly specified:
 ```{r}
-seqOpts <- setSeqOptions(seqId = "example2", seq = c("AAATGCTGAAGGT"))
+seqOpts <- seqSettings(seqId = "example2", seq = c("AAATGCTGAAGGT"))
 seqOpts$SEQUENCE_TARGET <- "37,21"
 str(seqOpts)
 ```

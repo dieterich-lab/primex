@@ -1,7 +1,7 @@
 context("Running Primer3")
 
 test_that("can execute", {
-  seqOpts <-setSeqOptions()
+  seqOpts <- seqSettings()
   seqOpts$SEQUENCE_ID <- "bcl6"
   seq <- paste0("TGTGAGAAGTGTAACCTGCATTTCCGTCACAAAAGCCAGCTGC",
            "GACTTCACTTGCGCCAGAAGCATGGCGCCATCACCAACACCAAGGTGCAATACCGCGTGTCA")
