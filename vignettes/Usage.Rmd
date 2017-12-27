@@ -182,7 +182,7 @@ exon2 <- paste0(
 
 It is straightforward to call Primer3 with the default values:
 ```{r}
-seqOpts <- setSeqOptions(
+seqOpts <- seqSettings(
   seqId = "example1",
   seq = c(exon1, exon2))
 

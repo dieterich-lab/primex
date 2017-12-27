@@ -1,11 +1,6 @@
-#' Pipe operator
-#'
-#' @name %>%
-#' @noRd
-#' @keywords internal
-#' @export
 #' @importFrom magrittr %>%
-NULL
+#' @export
+magrittr::`%>%`
 
 
 #' Set primer size
@@ -16,7 +11,6 @@ NULL
 #' @param max maximal length (PRIMER_MAX_SIZE)
 #'
 #' @return a settings list with updated values
-#' @importFrom magrittr "%>%"
 #' @export
 #'
 #' @examples

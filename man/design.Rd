@@ -4,8 +4,7 @@
 \alias{design}
 \title{Run primer design}
 \usage{
-design(seqOpts, primerOpts = NULL, returnStats = TRUE, path = list(primer3
-  = NULL, config = NULL))
+design(seqOpts, primerOpts = NULL, returnStats = TRUE, ...)
 }
 \arguments{
 \item{seqOpts}{parameters for the given sequence, 
@@ -18,9 +17,7 @@ parameters. Can be created using \link{p3Settings}.}
 the run statistics should be returned. This option overwrites 
 the one provided in the `primerOpts$PRIMER_EXPLAIN_FLAG`.}
 
-\item{path}{(optional) a named list with possible items:
-- primer3Path a path for the Primer3 executable (optional)
-- primer3Config a path for the Primer3 config files (optional)}
+\item{...}{path parameters for the `\link{runPrimer3}` call.}
 }
 \value{
 a data.frame with the designed primers

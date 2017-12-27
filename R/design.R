@@ -1,8 +1,8 @@
 
 #' A helper to define template parameters
 #'
-#' @param seqOpts a list with predefined parameters
-#' @param gr A `GRanges` object with `seq` column. It can include one or
+#' @param settings a list with predefined parameters
+#' @param granges A `GRanges` object with `seq` column. It can include one or
 #'   two elements. In the case of two, the sequences are concatenated and
 #'   one of the primers will be forced two overlap the splice junction.
 #' @param seq (if gr is NULL) a character vector of length 1 or 2.
@@ -17,17 +17,17 @@
 #' @examples 
 #' seqOpts <- seqSettings(seqId = "seq1", seq = "AATCTGAATCGCGCTTAAAGCTA")
 #'
-seqSettings <- function(seqOpts = NULL,
-                          gr = NULL, 
-                          seqId = NULL,
-                          seq = NULL) {
-  if (!is.null(gr)) {
-    stopifnot(inherits(gr, "GRanges"))
-    stopifnot(length(gr) %in% 1:2)
-    stopifnot(!is.null(mcols(gr)$seq))
+seqSettings <- function(settings = NULL,
+                        granges = NULL,
+                        seqId = NULL,
+                        seq = NULL) {
+  if (!is.null(granges)) {
+    stopifnot(inherits(granges, "GRanges"))
+    stopifnot(length(granges) %in% 1:2)
+    stopifnot(!is.null(mcols(granges)$seq))
     if (is.null(seqId))
-      seqId <- paste(gr$exon_id, collapse = "|")
-    seq <- S4Vectors::mcols(gr)$seq
+      seqId <- paste(granges$exon_id, collapse = "|")
+    seq <- S4Vectors::mcols(granges)$seq
   }
   # defined on the basis of the Primer3 html doc
   defaults <- list(
@@ -49,7 +49,7 @@ seqSettings <- function(seqOpts = NULL,
     SEQUENCE_ID = NULL,
     SEQUENCE_PRIMER_PAIR_OK_REGION_LIST = NULL
   )
-  defaults[names(seqOpts)] <- seqOpts
+  defaults[names(settings)] <- settings
   defaults$SEQUENCE_ID <- ifelse(is.null(seqId), "sequence1", seqId)
   defaults$SEQUENCE_TEMPLATE <- paste(seq, collapse = "")
   if (length(seq) == 2)
@@ -66,9 +66,7 @@ seqSettings <- function(seqOpts = NULL,
 #' @param returnStats (default: TRUE) if the "EXPLAIN" fields with 
 #'   the run statistics should be returned. This option overwrites 
 #'   the one provided in the `primerOpts$PRIMER_EXPLAIN_FLAG`.
-#' @param path (optional) a named list with possible items:
-#'   - primer3Path a path for the Primer3 executable (optional)
-#'   - primer3Config a path for the Primer3 config files (optional)
+#' @param ... path parameters for the `\link{runPrimer3}` call.
 #'
 #' @return a data.frame with the designed primers
 #' 
@@ -106,9 +104,9 @@ design <- function(seqOpts, primerOpts  = NULL, returnStats = TRUE, ...) {
 #'
 runPrimer3 <- function(path = list(primer3 = NULL, config  = NULL),
                        optionList) {
-  optionList   <- p3Settings(optionList)
   path$primer3 <- pickPrimer3Exec(path$primer3)
   path$config  <- pickPrimer3Config(path$config, path$primer3)
+  optionList   <- p3Settings(optionList)
   optionList$PRIMER_THERMODYNAMIC_PARAMETERS_PATH <- path$config
   optionList <- paste(names(optionList), optionList, sep = "=")
   # must have "=" sign in the very end of the file
@@ -141,8 +139,6 @@ extractPrimers <- function(result) {
     colnames(primers) <- sub("_0_","_", x = colnames(primers))
     colnames(primers) <- sub("_0$","", x = colnames(primers))
     primers <- data.frame(primers)
-    #### TODO coords
-    # lapply(primers$PRIMER_LEFT, strsplit,",")
   } 
   list(primers = primers, options = result)
 }
@@ -216,6 +212,8 @@ pickPrimer3Config <- function(primer3Config, primer3Path) {
 }
 
 #' Returns diagnostics information from the run
+#' 
+#' For this to work, `PRIMER_EXPLAIN_FLAG` in the must be set to "1".
 #'
 #' @param result a value returned by \link{runPrimer3}
 #'
@@ -228,7 +226,7 @@ pickPrimer3Config <- function(primer3Config, primer3Path) {
 #' seq1 <- paste(c("A", "T", "G", "C")[sample(4, 100, replace = TRUE)], 
 #'               collapse = "")
 #' seqOpts <- seqSettings(seqId = "seq1", seq = seq1)
-#' res <- runPrimer3(seqOpts)
+#' res <- design(seqOpts)
 #' diagnose(res)
 #' 
 diagnose <- function(result) {

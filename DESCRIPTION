@@ -13,8 +13,15 @@ Depends:
     GenomicRanges
 #Remotes: bioc::3.5/BiocInstaller, bioc::3.5/ensembldb, bioc::3.5/BSgenome,
 #         bioc::3.5/GenomicRanges
-Imports: ggplot2, stats, BSgenome, IRanges, S4Vectors, magrittr
+Imports: ggplot2,
+    stats,
+    BSgenome,
+    IRanges,
+    S4Vectors,
+    magrittr,
+    Biostrings
 Suggests:
+    Rsamtools,
     testthat,
     knitr,
     rmarkdown,

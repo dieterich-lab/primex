@@ -14,14 +14,14 @@ a list with statistics of the run for the left, right primers
  and their pairs.
 }
 \description{
-Returns diagnostics information from the run
+For this to work, `PRIMER_EXPLAIN_FLAG` in the must be set to "1".
 }
 \examples{
 # Too short sequence
 seq1 <- paste(c("A", "T", "G", "C")[sample(4, 100, replace = TRUE)], 
               collapse = "")
 seqOpts <- seqSettings(seqId = "seq1", seq = seq1)
-res <- runPrimer3(seqOpts)
+res <- design(seqOpts)
 diagnose(res)
 
 }
