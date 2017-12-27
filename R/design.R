@@ -108,11 +108,8 @@ runPrimer3 <- function(path = list(primer3 = NULL, config  = NULL),
   path$config  <- pickPrimer3Config(path$config, path$primer3)
   optionList   <- p3Settings(optionList)
   optionList$PRIMER_THERMODYNAMIC_PARAMETERS_PATH <- path$config
-  optionList <- paste(names(optionList), optionList, sep = "=")
-  # must have "=" sign in the very end of the file
-  optionList <- c(optionList, "=")
   inputFile <- tempfile()
-  writeLines(optionList, inputFile)
+  writeLines(listToP3(optionList), inputFile)
   result <- try(system(paste(path$primer3, inputFile), intern = TRUE))
   unlink(inputFile)
   result
@@ -143,14 +140,17 @@ extractPrimers <- function(result) {
   list(primers = primers, options = result)
 }
 
+listToP3 <- function(x) {
+  x <- paste(names(x), x, sep = "=")
+  # must have "=" sign in the very end of the file
+  c(x, "=")
+}
+
 p3ToList <- function(lines) {
-  settingsLines <- grep(".+=", lines) 
-  settings <- matrix(
-    unlist(lapply(lines[settingsLines], strsplit, "=")),
-    ncol = 2,
-    byrow = TRUE)
-  result <- as.list(settings[,2])
-  names(result) <- settings[,1]
+  lines <- grep(".+=", lines, value = TRUE) 
+  lines <- strsplit(lines, "=")
+  result <- lapply(lines, `[`, 2)
+  names(result) <- lapply(lines, `[`, 1)
   result
 }
 
