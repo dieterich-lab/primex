@@ -4,12 +4,12 @@
 \alias{seqSettings}
 \title{A helper to define template parameters}
 \usage{
-seqSettings(seqOpts = NULL, gr = NULL, seqId = NULL, seq = NULL)
+seqSettings(settings = NULL, granges = NULL, seqId = NULL, seq = NULL)
 }
 \arguments{
-\item{seqOpts}{a list with predefined parameters}
+\item{settings}{a list with predefined parameters}
 
-\item{gr}{A `GRanges` object with `seq` column. It can include one or
+\item{granges}{A `GRanges` object with `seq` column. It can include one or
 two elements. In the case of two, the sequences are concatenated and
 one of the primers will be forced two overlap the splice junction.}
 
