@@ -182,6 +182,7 @@ p3Settings <- function(settings = NULL, defaultsFile = NULL) {
   if ("" %in% names(settings)) {
     stop("Some arguments have empty names.")
   }
+  settings <- settings[!vapply(settings, is.null, logical(1))]
   defaults[names(settings)] <- settings
   defaults
 }
