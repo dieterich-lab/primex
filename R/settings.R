@@ -17,8 +17,35 @@ magrittr::`%>%`
 #' p3Settings() %>%
 #'   primerSize(min = 18, optimal = 20, max = 18)
 primerSize <- function(settings, min = NULL, optimal = NULL, max = NULL) {
-    settings$PRIMER_MIN_SIZE <- list(min)
-    settings$PRIMER_OPT_SIZE <- list(optimal)
-    settings$PRIMER_MAX_SIZE <- list(max)
+    settings["PRIMER_MIN_SIZE"] <- list(min)
+    settings["PRIMER_OPT_SIZE"] <- list(optimal)
+    settings["PRIMER_MAX_SIZE"] <- list(max)
     settings
+}
+
+#' Set ptimer melting temperatures
+#'
+#' @param settings a settings list created by `p3Settings`
+#' @param min minimal temperature (PRIMER_MAX_TM)
+#' @param optimal optimal temperature (PRIMER_OPT_TM)
+#' @param max maximal temperature (PRIMER_MIN_TM)
+#'
+#' @return a settings list with updated values
+#' @export
+#'
+#' @examples
+#' p3Settings() %>%
+#'   primerTm(min = 58, optimal = 60, max = 62)
+primerTm <- function(settings, min = NULL, optimal = NULL, max = NULL) {
+  settings["PRIMER_MAX_TM"] <- list(min)
+  settings["PRIMER_OPT_TM"] <- list(optimal)
+  settings["PRIMER_MIN_TM"] <- list(max)
+  settings
+}
+
+productSize <- function(settings, range) {
+  stopifnot(length(range) != 2) 
+  range <- paste(as.integer(range), collapse = "-")
+  settings["PRIMER_PRODUCT_SIZE_RANGE"] <- range
+  settings
 }
