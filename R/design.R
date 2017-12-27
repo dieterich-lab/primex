@@ -141,6 +141,7 @@ extractPrimers <- function(result) {
 }
 
 listToP3 <- function(x) {
+  x <- x[!vapply(x, is.null, logical(1))]
   x <- paste(names(x), x, sep = "=")
   # must have "=" sign in the very end of the file
   c(x, "=")
@@ -178,7 +179,6 @@ p3Settings <- function(settings = NULL, defaultsFile = NULL) {
   if ("" %in% names(settings)) {
     stop("Some arguments have empty names.")
   }
-  settings <- settings[!vapply(settings, is.null, logical(1))]
   defaults[names(settings)] <- settings
   defaults
 }
