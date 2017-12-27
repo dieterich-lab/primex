@@ -23,10 +23,8 @@ NULL
 #' p3Settings() %>%
 #'   primerSize(min = 18, optimal = 20, max = 18)
 primerSize <- function(settings, min = NULL, optimal = NULL, max = NULL) {
-  if (!is.null(min))
-    settings$PRIMER_MIN_SIZE <- min 
-  if (!is.null(optimal))
-    settings$PRIMER_OPT_SIZE <- optimal
-  if (!is.null(max))
-    settings$PRIMER_MAX_SIZE <- max
+    settings$PRIMER_MIN_SIZE <- list(min)
+    settings$PRIMER_OPT_SIZE <- list(optimal)
+    settings$PRIMER_MAX_SIZE <- list(max)
+    settings
 }
