@@ -5,16 +5,16 @@ Version: 0.1.0
 Author: Alexey Uvarovskii
 Maintainer: Alexey Uvarovskii <alexey.mipt@gmail.com>
 Description: Primer design using Primer3.
-License: GPL3.0
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: 
+Depends:
     R (>= 2.10),
     GenomicRanges
 #Remotes: bioc::3.5/BiocInstaller, bioc::3.5/ensembldb, bioc::3.5/BSgenome,
 #         bioc::3.5/GenomicRanges
 Imports: ggplot2, stats, BSgenome, IRanges, S4Vectors, magrittr
-Suggests: 
+Suggests:
     testthat,
     knitr,
     rmarkdown,
