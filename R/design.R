@@ -84,27 +84,39 @@ seqSettings <- function(seqOpts = NULL,
 #' res <- design(seqOpts)
 #' res$primers
 #'
-design <- function(seqOpts,
-                       primerOpts  = NULL,
-                       returnStats = TRUE,
-                       path = list(primer3 = NULL,
-                                   config  = NULL)) {
-  path$primer3 <- pickPrimer3Exec(path$primer3)
-  path$config  <- pickPrimer3Config(path$config, path$primer3)
+design <- function(seqOpts, primerOpts  = NULL, returnStats = TRUE, ...) {
   # we put all in a one input file
-  allOpts <- c(seqOpts, p3Settings(primerOpts))
-  allOpts <- allOpts[!vapply(allOpts, is.null, logical(1))]
-  allOpts$PRIMER_THERMODYNAMIC_PARAMETERS_PATH <- path$config
+  allOpts <- c(seqOpts, primerOpts)
   allOpts$PRIMER_EXPLAIN_FLAG <- ifelse(returnStats, "1", "0")
-  allOpts <- paste(names(allOpts), allOpts, sep = "=")
-  # must have "=" sign in the very end of the file
-  allOpts <- c(allOpts, "=")
-  inputFile <- tempfile() 
-  writeLines(allOpts,inputFile)
-  result <- try(system(paste(path$primer3, inputFile), intern = TRUE))
-  unlink(inputFile)
+  result <- runPrimer3(optionList = allOpts, ...)
   if (!inherits(result, "try-error")) 
     result <- extractPrimers(result) 
+  result
+}
+
+#' Invokes Primer3 for a given list of options
+#'
+#' @param path a list(primer3=, config=) with the path to the Primer3 executable
+#'   and the configuration file. By default, it uses the files provided with the
+#'   package installation.
+#' @param optionList a named list with all the run options.
+#'
+#' @return a named list
+#' @export
+#'
+runPrimer3 <- function(path = list(primer3 = NULL, config  = NULL),
+                       optionList) {
+  optionList   <- p3Settings(optionList)
+  path$primer3 <- pickPrimer3Exec(path$primer3)
+  path$config  <- pickPrimer3Config(path$config, path$primer3)
+  optionList$PRIMER_THERMODYNAMIC_PARAMETERS_PATH <- path$config
+  optionList <- paste(names(optionList), optionList, sep = "=")
+  # must have "=" sign in the very end of the file
+  optionList <- c(optionList, "=")
+  inputFile <- tempfile()
+  writeLines(optionList, inputFile)
+  result <- try(system(paste(path$primer3, inputFile), intern = TRUE))
+  unlink(inputFile)
   result
 }
 
