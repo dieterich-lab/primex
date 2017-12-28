@@ -22,21 +22,37 @@ extractCoords <- function(coords) {
     setNames(c("start", "width"))
 }
 
+#' Return primer coordinates.
+#' 
+#' In Primer3 LEFT and RIGHT are 0-based.
+#' RIGHT start is 5'-end of the primer, we coerce it to IRanges style.
+#'
+#' @param primers 
+#' @noRd
 primersToPairs <- function(primers) {
   lefts <- extractCoords(primers$PRIMER_LEFT)
+  lefts$start <- lefts$start + 1
   rights <- extractCoords(primers$PRIMER_RIGHT)
+  rights$start <- rights$start - rights$width + 2
   lapply(seq_along(lefts), function(i) {
     cbind(rbind(lefts[i,], rights[i,]), 
-    direction =c("forward", "reverse"))
+          direction = c("forward", "reverse"))
   })
 }
 
+primersToGRanges <- function(primers, exons) {
+  pairs <- primersToPairs(primers)
+  
+}
+
+splitPrimer <- function(x, upExonWidth) {
+  pair 
+}
+
+
 pairToGenome <- function(pair, seqs) {
-  res <- lapply(
-    list(start = IRanges::start(pair), end = IRanges::end(pair)),
-    .toGenome,
-    granges = seqs
-  )
+  pair$end   <- .toGenome(pair$start + pair$width, granges = seqs)
+  pair$start <- .toGenome(pair$start, granges = seqs)
   res <- do.call(rbind, Map(range, res$start, res$end))
   res <- GenomicRanges::GRanges(
     seqnames = S4Vectors::Rle(

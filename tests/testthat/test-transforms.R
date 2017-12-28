@@ -26,3 +26,21 @@ test_that("coordinate extracted correctly", {
   result <- data.frame(start = 10, width = 20)
   expect_equal(extractCoords("10,20"), result)
 })
+
+test_that("left and right treated correctly", {
+  p <- list(PRIMER_LEFT = c("0,1", "9,10"),
+            PRIMER_RIGHT = c("9,1", "99,10"))
+  res <- list(
+    data.frame(
+      start = c(1, 10),
+      width = c(1, 1),
+      direction = c("forward", "reverse")
+    ),
+    data.frame(
+      start = c(10, 91),
+      width = c(10, 10),
+      direction = c("forward", "reverse")
+    )
+  )
+  expect_equivalent(primersToPairs(p), res)
+})
