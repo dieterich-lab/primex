@@ -21,3 +21,8 @@ test_that("toGenome works properly", {
   expect_equal(7, primex:::.toGenome(4, c(downExon, upExon)))
   expect_equal(1007, primex:::.toGenome(14, c(downExon, upExon)))
 })
+
+test_that("coordinate extracted correctly", {
+  result <- data.frame(start = 10, width = 20)
+  expect_equal(extractCoords("10,20"), result)
+})

@@ -14,34 +14,28 @@
   x
 }
 
-primerCoords <- function(coords) {
-  coords <- do.call(
-    rbind,
-    lapply(coords,
-           function(x) {
-             x <- strsplit(x, ",")[[1]]
-             as.numeric(x)
-           }))
-  colnames(coords) <- c("start", "width")
-  as.data.frame(coords)
+extractCoords <- function(coords) {
+  coords <- strsplit(coords, ",") %>% lapply(as.integer)
+  stopifnot(all(lapply(coords, length) == 2))
+  do.call(rbind, coords) %>% 
+    as.data.frame() %>% 
+    setNames(c("start", "width"))
 }
 
-primersToRanges <- function(res) {
-  lefts <- do.call(IRanges::IRanges, primerCoords(res$PRIMER_LEFT))
-  rights <- do.call(IRanges::IRanges, primerCoords(res$PRIMER_RIGHT))
+primersToPairs <- function(primers) {
+  lefts <- extractCoords(primers$PRIMER_LEFT)
+  rights <- extractCoords(primers$PRIMER_RIGHT)
   lapply(seq_along(lefts), function(i) {
-    c(lefts[i], rights[i])
+    cbind(rbind(lefts[i,], rights[i,]), 
+    direction =c("forward", "reverse"))
   })
 }
 
-pairToGRanges <- function(pair, seqs) {
-  seqstrand <- as.character(strand(seqs))[1]
+pairToGenome <- function(pair, seqs) {
   res <- lapply(
     list(start = IRanges::start(pair), end = IRanges::end(pair)),
     .toGenome,
-    upExon = seqs[1],
-    downExon = seqs[2],
-    strand = seqstrand
+    granges = seqs
   )
   res <- do.call(rbind, Map(range, res$start, res$end))
   res <- GenomicRanges::GRanges(
@@ -50,4 +44,5 @@ pairToGRanges <- function(pair, seqs) {
     IRanges::IRanges(start = res[, 1], end = res[, 2]),
     strand = S4Vectors::Rle(unique(GenomicRanges::strand(seqs[1])),2)
   )
+  res
 }
