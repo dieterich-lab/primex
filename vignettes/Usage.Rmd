@@ -110,8 +110,8 @@ suppressPackageStartupMessages(
   library(BSgenome.Hsapiens.NCBI.GRCh38)
 )
 bsg <- BSgenome.Hsapiens.NCBI.GRCh38
-exseqs <- addSeq(sjExonPairs$ENST00000419510, bsg)
-exseqs$`ENSE00001666929|ENSE00001377234`
+exseqs <- addSeq(sjExonPairs[[1]], bsg)
+exseqs$`ENSE00001512051|ENSE00001377234`
 ```
 
 ### Run Primer3
@@ -123,7 +123,7 @@ the sequence of nucleotides itself,
 splice junction position, etc. One may start from the `GRanges` object, 
 which has a column `seq` with a nucleotide sequence for every item:
 ```{r}
-seqOpts <- seqSettings(gr = exseqs$`ENSE00001666929|ENSE00001377234`)
+seqOpts <- seqSettings(gr = exseqs$`ENSE00001512051|ENSE00001377234`)
 res <- design(seqOpts)
 # take first two pairs: Primer3 reports by default maximum 5 pairs
 knitr::kable(t(res$primers)[,1:2])
