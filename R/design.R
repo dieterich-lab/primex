@@ -86,7 +86,7 @@ design <- function(seqOpts, primerOpts  = NULL, returnStats = TRUE, ...) {
   # we put all in a one input file
   allOpts <- c(seqOpts, primerOpts)
   allOpts$PRIMER_EXPLAIN_FLAG <- ifelse(returnStats, "1", "0")
-  result <- runPrimer3(optionList = allOpts, ...)
+  result <- runPrimer3(settings = allOpts, ...)
   if (!inherits(result, "try-error")) 
     result <- extractPrimers(result) 
   result
@@ -94,22 +94,21 @@ design <- function(seqOpts, primerOpts  = NULL, returnStats = TRUE, ...) {
 
 #' Invokes Primer3 for a given list of options
 #'
+#' @param settings a named list with all the run options.
 #' @param path a list(primer3=, config=) with the path to the Primer3 executable
 #'   and the configuration file. By default, it uses the files provided with the
 #'   package installation.
-#' @param optionList a named list with all the run options.
 #'
 #' @return a named list
 #' @export
 #'
-runPrimer3 <- function(path = list(primer3 = NULL, config  = NULL),
-                       optionList) {
+runPrimer3 <- function(settings,path = list(primer3 = NULL, config  = NULL)) {
   path$primer3 <- pickPrimer3Exec(path$primer3)
   path$config  <- pickPrimer3Config(path$config, path$primer3)
-  optionList   <- p3Settings(optionList)
-  optionList$PRIMER_THERMODYNAMIC_PARAMETERS_PATH <- path$config
+  settings <- p3Settings(settings)
+  settings$PRIMER_THERMODYNAMIC_PARAMETERS_PATH <- path$config
   inputFile <- tempfile()
-  writeLines(listToP3(optionList), inputFile)
+  writeLines(listToP3(settings), inputFile)
   result <- try(system(paste(path$primer3, inputFile), intern = TRUE))
   unlink(inputFile)
   result
@@ -125,17 +124,18 @@ runPrimer3 <- function(path = list(primer3 = NULL, config  = NULL),
 # in the `option` list item.
 extractPrimers <- function(result) {
   result <- p3ToList(result)
-  primersInexes <- grep("(LEFT|RIGHT|PAIR)_\\d+", names(result))
+  primersInexes <- grep("(PRIMER_LEFT|PRIMER_RIGHT|PRIMER_PAIR)_\\d+",
+                        names(result))
   primers <- NULL
   if (length(primersInexes) > 0) {
     primers <- result[primersInexes]
     result <- result[-primersInexes]
     pairNumbers <- vapply(strsplit(names(primers), "_"),
                           `[[`, 3, FUN.VALUE = character(1))
-    primers <- do.call(rbind, split(primers, unlist(pairNumbers)))
+    primers <- do.call(rbind, split(unlist(primers),pairNumbers))
     colnames(primers) <- sub("_0_","_", x = colnames(primers))
     colnames(primers) <- sub("_0$","", x = colnames(primers))
-    primers <- data.frame(primers)
+    primers <- data.frame(primers, stringsAsFactors = FALSE)
   } 
   list(primers = primers, options = result)
 }
