@@ -15,7 +15,7 @@ magrittr::`%>%`
 #'
 #' @examples
 #' p3Settings() %>%
-#'   primerSize(min = 18, optimal = 20, max = 18)
+#'   primerSize(min = 18, optimal = 20, max = 22)
 primerSize <- function(settings, min = NULL, optimal = NULL, max = NULL) {
     stopifnot(min < optimal, optimal < max)
     settings["PRIMER_MIN_SIZE"] <- list(min)
