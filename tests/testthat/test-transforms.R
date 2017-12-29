@@ -46,8 +46,11 @@ test_that("left and right treated correctly", {
 })
 
 test_that("splitting works", {
-  pair <- data.frame(start = c(1, 100), width = c(10, 10), 
-      direction = c("forward", "reverse"))
+  pair <- data.frame(
+    start = c(1, 100),
+    width = c(10, 10),
+    direction = c("forward", "reverse")
+  )
   expect_equivalent(splitPrimer(pair, 0), pair)
   expect_equivalent(splitPrimer(pair, 109), pair)
   res <-  data.frame(
@@ -65,8 +68,7 @@ test_that("splitting works", {
   res <-  data.frame(
     start = c(1, 100, 101),
     width = c(10, 1, 9),
-    direction = c("forward", rep("reverse",2))
+    direction = c("forward", rep("reverse", 2))
   )
   expect_equivalent(splitPrimer(pair, 100), res)
-  
 })
