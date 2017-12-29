@@ -4,14 +4,14 @@
 \alias{runPrimer3}
 \title{Invokes Primer3 for a given list of options}
 \usage{
-runPrimer3(path = list(primer3 = NULL, config = NULL), optionList)
+runPrimer3(settings, path = list(primer3 = NULL, config = NULL))
 }
 \arguments{
+\item{settings}{a named list with all the run options.}
+
 \item{path}{a list(primer3=, config=) with the path to the Primer3 executable
 and the configuration file. By default, it uses the files provided with the
 package installation.}
-
-\item{optionList}{a named list with all the run options.}
 }
 \value{
 a named list
