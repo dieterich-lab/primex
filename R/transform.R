@@ -41,13 +41,23 @@ primersToPairs <- function(primers) {
 }
 
 primersToGRanges <- function(primers, exons) {
-  pairs <- primersToPairs(primers) %>% 
-    splitPrimer(IRanges::width(exons[1]))
-   
+  pairs <- primersToPairs(primers) %>%
+   lapply(., splitPrimer,IRanges::width(exons[1]))
 }
 
+
 splitPrimer <- function(x, upExonWidth) {
-  pair 
+  res <- lapply(1:2, function(i) {
+    y <- x[i,]
+    if (y$start <= upExonWidth && y$start + y$width - 1 > upExonWidth) {
+      y <- rbind(y, y, make.row.names = FALSE)
+      y$width[1] <- upExonWidth - y$start[1] + 1
+      y$start[2] <- upExonWidth + 1
+      y$width[2] <- y$width[2] - y$width[1]
+    }
+    y
+  })
+  do.call(rbind, res)
 }
 
 

@@ -44,3 +44,29 @@ test_that("left and right treated correctly", {
   )
   expect_equivalent(primersToPairs(p), res)
 })
+
+test_that("splitting works", {
+  pair <- data.frame(start = c(1, 100), width = c(10, 10), 
+      direction = c("forward", "reverse"))
+  expect_equivalent(splitPrimer(pair, 0), pair)
+  expect_equivalent(splitPrimer(pair, 109), pair)
+  res <-  data.frame(
+    start = c(1, 6, 100),
+    width = c(5, 5, 10),
+    direction = c(rep("forward", 2), "reverse")
+  )
+  expect_equivalent(splitPrimer(pair, 5), res)
+  res <-  data.frame(
+    start = c(1, 2, 100),
+    width = c(1, 9, 10),
+    direction = c(rep("forward", 2), "reverse")
+  )
+  expect_equivalent(splitPrimer(pair, 1), res)
+  res <-  data.frame(
+    start = c(1, 100, 101),
+    width = c(10, 1, 9),
+    direction = c("forward", rep("reverse",2))
+  )
+  expect_equivalent(splitPrimer(pair, 100), res)
+  
+})
