@@ -23,5 +23,6 @@ Set ptimer melting temperatures
 }
 \examples{
 p3Settings() \%>\%
-  primerTm(min = 58, optimal = 60, max = 62)
+  primerTm(min = 58, optimal = 60, max = 62) \%>\%
+  str()
 }

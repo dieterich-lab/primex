@@ -15,7 +15,8 @@ magrittr::`%>%`
 #'
 #' @examples
 #' p3Settings() %>%
-#'   primerSize(min = 18, optimal = 20, max = 22)
+#'   primerSize(min = 18, optimal = 20, max = 22) %>%
+#'   str()
 primerSize <- function(settings, min = NULL, optimal = NULL, max = NULL) {
     stopifnot(min < optimal, optimal < max)
     settings["PRIMER_MIN_SIZE"] <- list(min)
@@ -36,7 +37,8 @@ primerSize <- function(settings, min = NULL, optimal = NULL, max = NULL) {
 #'
 #' @examples
 #' p3Settings() %>%
-#'   primerTm(min = 58, optimal = 60, max = 62)
+#'   primerTm(min = 58, optimal = 60, max = 62) %>%
+#'   str()
 primerTm <- function(settings, min = NULL, optimal = NULL, max = NULL) {
   stopifnot(min < optimal, optimal < max)
   settings["PRIMER_MAX_TM"] <- list(min)
@@ -55,10 +57,10 @@ primerTm <- function(settings, min = NULL, optimal = NULL, max = NULL) {
 #' @export
 #'
 #' @examples
-#' p3Settings() %>% productSize(c(100,300))
+#' str(p3Settings() %>% productSize(c(100,300)))
 #' 
 productSize <- function(settings, range) {
-  stopifnot(length(range) != 2) 
+  stopifnot(length(range) == 2) 
   stopifnot(range[1] < range[2])
   range <- paste(as.integer(range), collapse = "-")
   settings["PRIMER_PRODUCT_SIZE_RANGE"] <- range

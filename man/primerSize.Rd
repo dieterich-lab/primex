@@ -23,5 +23,6 @@ Set primer size
 }
 \examples{
 p3Settings() \%>\%
-  primerSize(min = 18, optimal = 20, max = 22)
+  primerSize(min = 18, optimal = 20, max = 22) \%>\%
+  str()
 }

@@ -19,6 +19,6 @@ a settings list with updated values
 Set product size
 }
 \examples{
-p3Settings() \%>\% productSize(c(100,300))
+str(p3Settings() \%>\% productSize(c(100,300)))
 
 }
