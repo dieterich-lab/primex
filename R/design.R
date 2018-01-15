@@ -84,7 +84,8 @@ seqSettings <- function(settings = NULL,
 #'
 design <- function(seqOpts, primerOpts  = NULL, returnStats = TRUE, ...) {
   # we put all in a one input file
-  allOpts <- c(seqOpts, primerOpts)
+  allOpts <- seqOpts
+  allOpts[names(primerOpts)] <- primerOpts
   allOpts$PRIMER_EXPLAIN_FLAG <- ifelse(returnStats, "1", "0")
   result <- runPrimer3(settings = allOpts, ...)
   if (!inherits(result, "try-error")) 
