@@ -41,9 +41,9 @@ primerSize <- function(settings, min = NULL, optimal = NULL, max = NULL) {
 #'   str()
 primerTm <- function(settings, min = NULL, optimal = NULL, max = NULL) {
   stopifnot(min < optimal, optimal < max)
-  settings["PRIMER_MAX_TM"] <- list(min)
+  settings["PRIMER_MAX_TM"] <- list(max)
   settings["PRIMER_OPT_TM"] <- list(optimal)
-  settings["PRIMER_MIN_TM"] <- list(max)
+  settings["PRIMER_MIN_TM"] <- list(min)
   settings
 }
 
