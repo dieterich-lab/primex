@@ -78,12 +78,12 @@ pairToGenome <- function(pair, exons) {
 #' @param primers the "primers" item of the `\link{design}` output
 #' @param exons the GRanges of the exons
 #'
-#' @return GRanges object
+#' @return GRangesList
 #' @export
 #'
 toGRanges <- function(primers, exons) {
   pairs <- primers %>%
     primersToPairs() %>%
     insertJunctions(exons) 
-  lapply(pairs, pairToGenome, exons)
+  GenomicRanges::GRangesList(lapply(pairs, pairToGenome, exons))
 }
