@@ -40,11 +40,6 @@ primersToPairs <- function(primers) {
   })
 }
 
-primersToGRanges <- function(primers, exons) {
-  pairs <- primersToPairs(primers)
-  lapply(pairs, splitPrimer, IRanges::width(exons)[1])
-}
-
 
 splitPrimer <- function(x, upExonWidth) {
   res <- lapply(1:2, function(i) {
@@ -60,16 +55,34 @@ splitPrimer <- function(x, upExonWidth) {
   do.call(rbind, res)
 }
 
+insertJunctions <- function(pairs, exons) {
+  lapply(pairs, splitPrimer, IRanges::width(exons)[1])
+}
 
-pairToGenome <- function(pair, seqs) {
-  pair$end   <- .toGenome(pair$start + pair$width, granges = seqs)
-  pair$start <- .toGenome(pair$start, granges = seqs)
-  res <- do.call(rbind, Map(range, res$start, res$end))
-  res <- GenomicRanges::GRanges(
-    seqnames = S4Vectors::Rle(
-      unique(GenomicRanges::seqnames(seqs[1])), lengths = 2),
-    IRanges::IRanges(start = res[, 1], end = res[, 2]),
-    strand = S4Vectors::Rle(unique(GenomicRanges::strand(seqs[1])),2)
-  )
+pairToGenome <- function(pair, exons) {
+  ends   <- .toGenome(pair$start + pair$width - 1, granges = exons)
+  starts <- .toGenome(pair$start, granges = exons)
+  res <- do.call(rbind, Map(range, starts, ends))
+  seqnames <- S4Vectors::Rle(GenomicRanges::seqnames(exons[1]))
+  strands  <- S4Vectors::Rle(GenomicRanges::strand(exons[1]))
+  res <- GenomicRanges::GRanges(seqnames,
+                         IRanges::IRanges(start = res[, 1], end = res[, 2]),
+                         strand = strands)
+  S4Vectors::mcols(res) <- pair[!names(pair) %in% c("start", "width")]
   res
+}
+
+#' Transforms output of design to GRanges
+#'
+#' @param primers the "primers" item of the `\link{design}` output
+#' @param exons the GRanges of the exons
+#'
+#' @return GRanges object
+#' @export
+#'
+toGRanges <- function(primers, exons) {
+  pairs <- primers %>%
+    primersToPairs() %>%
+    insertJunctions(exons) 
+  lapply(pairs, pairToGenome, exons)
 }

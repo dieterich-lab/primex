@@ -72,3 +72,58 @@ test_that("splitting works", {
   )
   expect_equivalent(splitPrimer(pair, 100), res)
 })
+
+test_that("pair to genome works + strand", {
+  pair <- data.frame(
+    start = c(1, 11, 1001 + 10),
+    width = c(10, 5, 10),
+    direction = c("forward", "reverse")[c(1,1,2)]
+  )
+  upExon <- GRanges(
+    seqnames = 'a',
+    strand = Rle('+', 1),
+    ranges = IRanges(start = 1, end = 10)
+  )
+  downExon <- GRanges(
+    seqnames = 'a',
+    strand = Rle('+', 1),
+    ranges = IRanges(start = 1001, end = 10000)
+  )
+  exons <- c(upExon, downExon)
+  primerRanges <- GRanges(
+    seqnames = "a",
+    ranges = IRanges(start = c(1, 1001, 2001),
+                     end = c(10, 1005, 2010)),
+    strand = "+")
+  mcols(primerRanges) <- pair["direction"]
+  res <- pairToGenome(pair, exons)
+  expect_equal(res, primerRanges)
+})
+
+test_that("pair to genome works - strand", {
+  pair <- data.frame(
+    start = c(1, 11, 1001 + 10),
+    width = c(10, 5, 10),
+    direction = c("forward", "reverse")[c(1,1,2)]
+  )
+  upExon <- GRanges(
+    seqnames = 'a',
+    strand = Rle('-', 1),
+    ranges = IRanges(start = 2991, end = 3000)
+  )
+  downExon <- GRanges(
+    seqnames = 'a',
+    strand = Rle('-', 1),
+    ranges = IRanges(start = 1, end = 2000)
+  )
+  exons <- c(upExon, downExon)
+  primerRanges <- GRanges(
+    seqnames = "a",
+    ranges = IRanges(start = c(2991, 1996, 991),
+                     end = c(3000, 2000, 1000)),
+    strand = "-")
+  mcols(primerRanges) <- pair["direction"]
+  
+  res <- pairToGenome(pair, exons)
+  expect_equal(res, primerRanges)
+})
