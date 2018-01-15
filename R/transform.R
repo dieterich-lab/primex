@@ -56,6 +56,7 @@ splitPrimer <- function(x, upExonWidth) {
 }
 
 insertJunctions <- function(pairs, exons) {
+  force(pairs)
   lapply(pairs, splitPrimer, IRanges::width(exons)[1])
 }
 
