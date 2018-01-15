@@ -11,3 +11,11 @@ mockDNAStringSet <- function(seqnames, lens) {
   names(res) <- seqnames
   Biostrings::DNAStringSet(res)
 }
+
+#' Get Primer3 version 
+#'
+#' @export
+#'
+p3Version <- function() {
+  
+}
