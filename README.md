@@ -22,21 +22,24 @@ Quick start
 
 ``` r
 library(primex)
-exon1 <- paste0(
+
+exonSeqs <- c(
+exon1 = paste0(
   "CTCACCATGGATGATGATATCGCCGCGCTCGTCGTCGACAACGGCTCCGGCATGTGCAAG",
   "GCCGGCTTCGCGGGCGACGATGCCCCCCGGGCCGTCTTCCCCTCCATCGTGGC",
-  "AGGCACCAG")
-exon2 <- paste0(
+  "AGGCACCAG"),
+exon2 = paste0(
  "GGCGTGATGGTGGGCATGGGTCAGAAGGATTCCTATGTGGGCGACGAGGCCCAGAGCAAG",
  "AGAGGCATCCTCACCCTGAAGTACCCCATCGAGCACGGCATCGTCACCAACTGGGACGAC",
  "ATGGAGAAAATCTGGCACCACACCTTCTACAATGAGCTGCGTGTGGCTCCCGAGGAGCAC",
- "CCCGTGCTGCTGACCGAGGCCCCCCTGAACCCCAAGGCCAACCGCGAGAAGATGACCCAG") 
+ "CCCGTGCTGCTGACCGAGGCCCCCCTGAACCCCAAGGCCAACCGCGAGAAGATGACCCAG") )
 
-seqOpts <-
-  seqSettings(seqId = "transcript2", seq = c(exon1, exon2)) %>%
+seqOpts <- seqSettings(seqId = "transcript2", seq = exonSeqs) 
+
+p3Opts  <- p3Settings() %>%  
   primerTm(min = 58, optimal = 63, max = 67)
 
-primers <- design(seqOpts)
+primers <- design(seqOpts, p3Opts)
 ```
 
 First two candidate pairs:
