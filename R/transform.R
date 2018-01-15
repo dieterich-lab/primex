@@ -41,9 +41,8 @@ primersToPairs <- function(primers) {
 }
 
 primersToGRanges <- function(primers, exons) {
-  pairs <- primersToPairs(primers) %>%
-   lapply(., splitPrimer,IRanges::width(exons)[1])
-  pairs
+  pairs <- primersToPairs(primers)
+  lapply(pairs, splitPrimer, IRanges::width(exons)[1])
 }
 
 
