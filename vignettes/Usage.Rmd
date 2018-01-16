@@ -145,10 +145,10 @@ knitr::kable(t(res$primers)[,1:2])
 
 ### Result in GRanges 
 
-```{r}
+```{r fig.width=6, fig.height=5, dpi = 300, out.width="70%"}
 grPrimers <- toGRanges(res$primers, exseqs$`ENSE00001752117|ENSE00001377234`)
 names(grPrimers) <- paste("primers", 1:2)
-plotSegments(bcl6exons, grPrimers)
+plotSegments(bcl6exons, primersToList(grPrimers))
 ```
 
 
