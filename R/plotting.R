@@ -1,11 +1,10 @@
 #' Plot exon structure 
 #'
-#' @param ex exon structure
-#' @param colours colours
+#' @param ... gene model, primers or other intervals in GRanges
 #'
 #' @export
 #' @import  ggplot2
-plotSegments <- function(..., colours = NULL, normalise = TRUE) {
+plotSegments <- function(...) {
   grLists <- list(...)
   # remove metadata
   grLists <- lapply(grLists, unlist)
@@ -14,37 +13,67 @@ plotSegments <- function(..., colours = NULL, normalise = TRUE) {
       grLists[[i]] <- split(grLists[[i]], names(grLists[[i]]))
   }
   grLists <- do.call(c, grLists)
-  segs <- gr2segments(unname(grLists), normalise)
-  segs$colours <- "black"
-  if (!is.null(colours)) {
-    segs$colours <- colours
-  }
+  segs <- gr2segments(unname(grLists))
+  # connecting lines
+  lines <- do.call(rbind, 
+                   lapply(split(segs, segs$track_id),
+                          function(x) {
+                            data.frame(start = min(x$start), end = max(x$end))
+                          }))
+  lines$track_id <- rownames(lines)
   q <- ggplot2::ggplot() + 
     ggplot2::geom_segment(data = segs,
                  mapping = ggplot2::aes(
                    x = start,
                    xend = end,
                    y = track_id,
-                   yend = track_id,
-                   colour = I(colours)),
+                   yend = track_id),
                  size = 8) + 
+    ggplot2::geom_segment(
+      data = lines,
+      mapping = ggplot2::aes(
+        x = start,
+        xend = end,
+        y = track_id,
+        yend = track_id
+      ), size = 1, colour = "black"
+    ) +  
     ggplot2::geom_vline(xintercept = unique(c(segs$start, segs$end)),
                colour = "grey80") + 
     ggplot2::theme_classic() + 
     ggplot2::theme(axis.text.x = element_blank(),
           axis.line.x = element_blank(),
           axis.ticks.x = element_blank(),
-          axis.ticks.y = element_blank())+
+          axis.ticks.y = element_blank()) +
     ggplot2::ylab("")  +
     ggplot2::xlab("")
   print(q)
 }
 
+#' Split primers GRanges into a list by their direction
+#'
+#' @param grPrimers a GRanges with the forward and reverse primers 
+#'
+#' @return a list with separate GRanges for every direction
+#' @export
+#'
+primersToList <- function(grPrimers) {
+  result <- lapply(names(grPrimers), function(primersName) {
+    if (!is.null(grPrimers[[primersName]]$direction)) {
+      primers <- split(grPrimers[[primersName]], grPrimers[[primersName]]$direction)
+      names(primers) <- paste(primersName, names(primers), sep = "-")
+      primers
+    } else {
+      grPrimers[[primersName]]
+    }
+  })
+  do.call(c, result)
+}
+
+
+
 gr2segments <- function(gr, normalise = TRUE) {
-  #if (class(gr) %in% c("GRangesList", "list")) {
-  #  gr <- unlist(GenomicRanges::GRangesList(gr))
-  #}
-  gr <- do.call(c, gr)
+  gr <- do.call(c, as.list(gr))
   gr$track_id <- names(gr)
   gr <- unname(gr)
   gr <- as.data.frame(gr)
