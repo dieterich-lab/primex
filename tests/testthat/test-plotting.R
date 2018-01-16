@@ -24,6 +24,3 @@ test_that("normalisation works", {
                
 })
 
-test_that("plotting without errors", {
-  
-})
