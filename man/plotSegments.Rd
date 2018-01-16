@@ -4,12 +4,10 @@
 \alias{plotSegments}
 \title{Plot exon structure}
 \usage{
-plotSegments(ex, colours = NULL)
+plotSegments(...)
 }
 \arguments{
-\item{ex}{exon structure}
-
-\item{colours}{colours}
+\item{...}{gene model, primers or other intervals in GRanges}
 }
 \description{
 Plot exon structure

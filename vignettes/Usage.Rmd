@@ -70,48 +70,62 @@ primers <- design(seqOpts)
 
 ## Step by step
 
-```{r}
+```{r include = FALSE}
+suppressPackageStartupMessages(
 library(primex)  
+)
 ```
+
 
 ### Find unique exons 
 
 Let us consider human BCL6 gene, which has a lot of isoforms.
-First, we need to get annotation e.g. from Ensembl data base.
-The input format is a list of genomic ranges (`GRanges` object).
-Every list item has corresponding transcript name and a list 
-of exons with their `exon_id` and `exon_rank`.
+To identify which exons to use for the primer design,
+we need a `GRanges` list with the gene model, such as:
 
-```{r fig.width=6, fig.height=4, dpi = 300, out.width="70%"}
-suppressPackageStartupMessages(
-  library(GenomicRanges)
-)
-primex::bcl6exons[1]
-plotSegments(primex::bcl6exons)
+1. Names of the list items correspond to the transcript names.
+2. Exons are ordered according to their rank 
+(`exon_rank` in the `ensembldb` packages).
+3. A metadata column `exon_id` must be present in the GRanges objects.
+
+```{r}
+primex::bcl6exons[[1]]
 ```
-
 
 In order to distinguish isoforms using PCR, we look for unique splice junctions,
 i.e. unique exon pairs. **This is the default behaviour. **
 For every transcript we may receive several such 
-candidates, for example,
+candidates.
 ```{r}
 sjExonPairs <- selectPairs(primex::bcl6exons)
-sjExonPairs$ENST00000419510[1]
 ```
+Since we included all types of support, there are not so many unique junctions:
+```{r}
+sapply(sjExonPairs, length)
+```
+
+The gene model can be visualised using `primex` as well:
+
+```{r fig.width=6, fig.height=4, dpi = 300, out.width="70%"}
+plotSegments(primex::bcl6exons)
+```
+
 
 ### Provide sequences 
 
-If there is annotation package, one may retrieve sequences of the exons from it.
-We implemented a function to tie sequences from the  BSgenome packages:
+If theere is available BSgenome package,
+one may retrieve exonic sequences from it.
+We implemented a functionality  to ease this interface:
 
 ```{r}
 suppressPackageStartupMessages(
   library(BSgenome.Hsapiens.NCBI.GRCh38)
 )
 bsg <- BSgenome.Hsapiens.NCBI.GRCh38
-exseqs <- addSeq(sjExonPairs[[1]], bsg)
-exseqs$`ENSE00001512051|ENSE00001377234`
+
+exonPairs <- sjExonPairs$ENST00000438077
+exseqs <- addSeq(exonPairs, bsg)
+exseqs$`ENSE00001752117|ENSE00001377234`
 ```
 
 ### Run Primer3
@@ -123,13 +137,38 @@ the sequence of nucleotides itself,
 splice junction position, etc. One may start from the `GRanges` object, 
 which has a column `seq` with a nucleotide sequence for every item:
 ```{r}
-seqOpts <- seqSettings(gr = exseqs$`ENSE00001512051|ENSE00001377234`)
+seqOpts <- seqSettings(gr = exseqs$`ENSE00001752117|ENSE00001377234`)
 res <- design(seqOpts)
 # take first two pairs: Primer3 reports by default maximum 5 pairs
 knitr::kable(t(res$primers)[,1:2])
 ```
 
+### Result in GRanges 
+
+```{r}
+grPrimers <- toGRanges(res$primers, exseqs$`ENSE00001752117|ENSE00001377234`)
+names(grPrimers) <- paste("primers", 1:2)
+plotSegments(bcl6exons, grPrimers)
+```
+
+
 ### More on parameters
+
+There are some shortcuts for the most common parameters.
+They can be combined with the pipe operator `%>%`
+
+```{r}
+p3Opts <- p3Settings() %>%
+  primerSize(min = 18, optimal = 20, max = 22) %>%
+  primerTm(min = 57, optimal = 61, max = 64) %>%
+  productSize(c(100,400))
+```
+
+or they can be used on their own:
+```{r}
+p3Opts <- productSize(p3Opts, c(200,300))
+```
+
 
 All the parameters can be explicitly specified:
 ```{r}
@@ -145,6 +184,9 @@ primerOpts <- p3Settings()
 primerOpts$PRIMER_PRODUCT_OPT_SIZE <- "100,300"
 primerOpts$PRIMER_OPT_TM <- "60.0"
 ```
+
+
+## I want to use own executable
 
 It is possible to run your own *Primer3* executable, having
 provided the needed paths.
