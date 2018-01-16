@@ -5,8 +5,16 @@
 #'
 #' @export
 #' @import  ggplot2
-plotSegments <- function(ex, colours = NULL) {
-  segs <- gr2segments(ex) 
+plotSegments <- function(..., colours = NULL) {
+  grLists <- list(...)
+  # remove metadata
+  grLists <- lapply(grLists, unlist)
+  for (i in seq_along(grLists)) {
+      S4Vectors::mcols(grLists[[i]]) <- NULL
+      grLists[[i]] <- split(grLists[[i]], names(grLists[[i]]))
+  }
+  grLists <- do.call(c, grLists)
+  segs <- gr2segments(unname(grLists))
   segs$colours <- "black"
   if (!is.null(colours)) {
     segs$colours <- colours
