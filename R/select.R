@@ -66,7 +66,11 @@ filterByDistance <- function(expairs, minDiff) {
 # assume that they are ordered by the exon_rank
 pair2sj <- function(p) {
   x <- as.data.frame(p)
-  c(x$end[1], x$start[2])
+  if (x$strand[1] == "-") {
+    c(x$end[2], x$start[1])
+  } else {
+    c(x$end[1], x$start[2])
+  }
 }
 
 
