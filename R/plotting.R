@@ -5,7 +5,7 @@
 #'
 #' @export
 #' @import  ggplot2
-plotSegments <- function(..., colours = NULL) {
+plotSegments <- function(..., colours = NULL, normalise = TRUE) {
   grLists <- list(...)
   # remove metadata
   grLists <- lapply(grLists, unlist)
@@ -14,7 +14,7 @@ plotSegments <- function(..., colours = NULL) {
       grLists[[i]] <- split(grLists[[i]], names(grLists[[i]]))
   }
   grLists <- do.call(c, grLists)
-  segs <- gr2segments(unname(grLists))
+  segs <- gr2segments(unname(grLists), normalise)
   segs$colours <- "black"
   if (!is.null(colours)) {
     segs$colours <- colours
@@ -41,19 +41,28 @@ plotSegments <- function(..., colours = NULL) {
 }
 
 gr2segments <- function(gr, normalise = TRUE) {
-  if (class(gr) %in% c("GRangesList", "list")) {
-    gr <- unlist(GenomicRanges::GRangesList(gr))
-  }
+  #if (class(gr) %in% c("GRangesList", "list")) {
+  #  gr <- unlist(GenomicRanges::GRangesList(gr))
+  #}
+  gr <- do.call(c, gr)
   gr$track_id <- names(gr)
   gr <- unname(gr)
   gr <- as.data.frame(gr)
   if (normalise) {
     norm <- normaliseData(gr = gr)
+    gr[c("start", "end")] <- norm$gr
   }
-  gr[c("start", "end")] <- norm$gr
   gr 
 }
 
+#' Substitutes coordinates by their ranks (among all points).
+#'
+#' @param x an integer vector (e.g. starts)
+#' @param y an integer vector (e.g. ends)
+#'
+#' @return a list with the ranked coordinates, list(x_ranks, y_ranks)
+#'
+#' @noRd
 unifyDiff <- function(x,y) {
   points <- cbind(x,y)
   o <- order(points)
@@ -64,15 +73,21 @@ unifyDiff <- function(x,y) {
        points[seq_along(y) + length(x)])
 }
 
+#' Apply unifyDiff on a list of intervals
+#'
+#' @param ... data.frames with `start` and `end` columns
+#'
+#' @return
+#'
+#' @noRd
 normaliseData <- function(...){
   dat <- list(...)
   toProcess <- vapply(dat, Negate(is.null), logical(1))
   columns <- c("start", "end")
   positions <- do.call(rbind,
-                       lapply(names(dat)[toProcess], function(x){
+                       lapply(names(dat)[toProcess], function(x) {
                          cbind(id = x, dat[[x]][, columns])
-                       })
-  )
+                       }))
   result <- as.data.frame(
     do.call(cbind,
             unifyDiff(positions$start, positions$end))
