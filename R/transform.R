@@ -19,7 +19,7 @@ extractCoords <- function(coords) {
   stopifnot(all(lapply(coords, length) == 2))
   do.call(rbind, coords) %>% 
     as.data.frame() %>% 
-    setNames(c("start", "width"))
+    stats::setNames(c("start", "width"))
 }
 
 #' Return primer coordinates.
