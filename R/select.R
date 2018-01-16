@@ -84,6 +84,7 @@ pair2sj <- function(p) {
 #' @return a list of GRanges with additional `seq` data column with
 #'   the retrieved sequence.
 #' @export
+#' @import GenomicRanges
 #'
 addSeq <- function(exonPairs, src) {
   stopifnot(allInherit(exonPairs, "GRanges"))
