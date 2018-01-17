@@ -5,7 +5,7 @@
 primex
 ======
 
-Design primers using Primer3.
+An R package to easy primer design using Primer3.
 
 Installation
 ------------
