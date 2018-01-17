@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/dieterich-lab/primex.svg?branch=dev)](https://travis-ci.org/dieterich-lab/primex.svg?branch=dev) [![codecov](https://codecov.io/gh/dieterich-lab/primex/branch/dev/graph/badge.svg)](https://codecov.io/gh/dieterich-lab/primex/)
+[![Build Status](https://travis-ci.org/dieterich-lab/primex.svg?branch=master)](https://travis-ci.org/dieterich-lab/primex) [![codecov](https://codecov.io/gh/dieterich-lab/primex/branch/master/graph/badge.svg)](https://codecov.io/gh/dieterich-lab/primex/)
 
 primex
 ======
