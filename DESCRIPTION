@@ -14,7 +14,7 @@ Depends:
     R (>= 2.10),
     GenomicRanges
 #Remotes: bioc::3.5/BiocInstaller, bioc::3.5/ensembldb, bioc::3.5/BSgenome,
-#         bioc::3.5/GenomicRanges
+#         bioc: :3.5/GenomicRanges
 Imports: ggplot2,
     stats,
     BSgenome,
@@ -31,3 +31,4 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 URL: https://github.com/dieterich-lab/primex, http://github.com/dieterich-lab/primex
+BugReports: https://github.com/dieterich-lab/primex/issues
