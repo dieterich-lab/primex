@@ -99,7 +99,8 @@ candidates.
 ```{r}
 sjExonPairs <- selectPairs(primex::bcl6exons)
 ```
-Since we included all types of support, there are not so many unique junctions:
+Since we included transcripts with all types of support, 
+there are not so many unique junctions:
 ```{r}
 sapply(sjExonPairs, length)
 ```
@@ -113,7 +114,7 @@ plotSegments(primex::bcl6exons)
 
 ### Provide sequences 
 
-If theere is available BSgenome package,
+If there is available BSgenome package,
 one may retrieve exonic sequences from it.
 We implemented a functionality  to ease this interface:
 
