@@ -2,7 +2,9 @@ Package: primex
 Type: Package
 Title: Designs primers
 Version: 0.1.0
-Author: Alexey Uvarovskii
+Authors@R: c(
+    person("Alexey", "Uvarovskii", , "alexey.mipt@gmail.com", role = c("aut", "cre"))
+    )
 Maintainer: Alexey Uvarovskii <alexey.mipt@gmail.com>
 Description: Primer design using Primer3.
 License: GPL-3 + file LICENSE
@@ -28,3 +30,4 @@ Suggests:
     covr
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
+URL: https://github.com/dieterich-lab/primex, http://github.com/dieterich-lab/primex
