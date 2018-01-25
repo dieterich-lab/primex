@@ -34,7 +34,7 @@ primersToPairs <- function(primers) {
   lefts$start <- lefts$start + 1
   rights <- extractCoords(primers$PRIMER_RIGHT)
   rights$start <- rights$start - rights$width + 2
-  lapply(seq_along(lefts), function(i) {
+  lapply(seq_along(lefts[,1]), function(i) {
     cbind(rbind(lefts[i,], rights[i,]), 
           direction = c("forward", "reverse"))
   })
